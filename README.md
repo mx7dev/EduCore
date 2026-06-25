@@ -7,8 +7,25 @@ Sistema de gestión educativa construido con **.NET 10** y **Angular** aplicando
 Este proyecto aplica una arquitectura de 3 capas:
 
 - **EduCore.API** — capa de presentación (Controllers, REST API)
-- **EduCore.Business** — capa de negocio (Servicios, Entidades, Reglas)
-- **EduCore.Infrastructure** — capa de datos (Repositorios, Entity Framework)
+- **EduCore.Business** — capa de negocio (Servicios, Entidades, Reglas, DTOs)
+- **EduCore.Infrastructure** — capa de datos (Repositorios, Entity Framework Core)
+
+```
+┌─────────────────────────────────┐
+│         EduCore.API             │
+│   (Controllers, Swagger)        │
+└────────────────┬────────────────┘
+                 │
+┌────────────────▼────────────────┐
+│       EduCore.Business          │
+│  (Services, Entities, DTOs)     │
+└────────────────┬────────────────┘
+                 │
+┌────────────────▼────────────────┐
+│     EduCore.Infrastructure      │
+│  (Repositories, EF Core, BD)    │
+└─────────────────────────────────┘
+```
 
 ## 🛠️ Tecnologías
 
@@ -16,23 +33,104 @@ Este proyecto aplica una arquitectura de 3 capas:
 - ASP.NET Core Web API
 - Entity Framework Core (Code First)
 - SQL Server
+- Swagger / OpenAPI
 - Angular (próximamente)
+
+## ✅ Fases completadas
+
+### Fase 1 — CRUD base
+- Arquitectura en 3 capas
+- Entidad `Alumno` con encapsulamiento y reglas de dominio
+- Repository Pattern con interfaz desacoplada
+- Inyección de dependencias (Scoped)
+- DTOs para entrada (`CrearAlumnoDto`) y salida (`AlumnoDto`)
+- Generación automática de código de alumno (año + correlativo)
+- API REST con Swagger
+
+## 🔜 Próximas fases
+
+- **Fase 2** — Validaciones con FluentValidation y manejo de errores
+- **Fase 3** — Autenticación con JWT y roles
+- **Fase 4** — Foto de perfil
+- **Fase 5** — Historial de cambios y auditoría
+- **Fase 6** — Notificaciones
+- **Fase 7** — Reportes
 
 ## 🚀 Cómo ejecutar
 
-1. Clona el repositorio
-2. Configura tu cadena de conexión en `appsettings.json`
+### Requisitos previos
+- .NET 10 SDK
+- SQL Server (local o Docker)
+- Visual Studio 2026 o VS Code
+
+### Pasos
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/mx7dev/EduCore.git
+   ```
+
+2. Configura la cadena de conexión en `backend/EduCore/EduCore.API/appsettings.json`:
+   ```json
+   {
+     "ConnectionStrings": {
+       "DefaultConnection": "Server=localhost,1433;Database=EduCoreDb;User Id=sa;Password=TuPassword;TrustServerCertificate=True"
+     }
+   }
+   ```
+
 3. Ejecuta las migraciones:
-```bash
-   dotnet ef database update --project backend/EduCore/EduCore.Infrastructure --startup-project backend/EduCore/EduCore.API
-```
+   ```bash
+   cd backend/EduCore/EduCore.API
+   dotnet ef database update --project ../EduCore.Infrastructure --startup-project .
+   ```
+
 4. Corre la API:
-```bash
+   ```bash
    dotnet run --project backend/EduCore/EduCore.API
+   ```
+
+5. Abre Swagger en:
+   ```
+   https://localhost:7208/swagger
+   ```
+
+## 📐 Decisiones arquitectónicas
+
+| Decisión | Alternativa considerada | Razón |
+|---|---|---|
+| Arquitectura en 3 capas | DDD, Hexagonal | Dominio simple, equipo pequeño, sin necesidad de over-engineering |
+| Code First | Database First | Versionado de BD junto al código, fácil de clonar y ejecutar |
+| Repository Pattern | Acceso directo con DbContext | Desacoplar lógica de negocio del acceso a datos |
+| DTOs separados | Exponer entidades directamente | Seguridad, no exponer estructura interna de BD |
+| Scoped lifetime | Singleton, Transient | Cada request HTTP tiene su propia instancia del DbContext |
+
+## 📁 Estructura del proyecto
+
 ```
-
-## 📚 Decisiones arquitectónicas
-
-- Se eligió arquitectura en capas sobre DDD/Hexagonal porque el dominio es simple y el equipo es pequeño
-- Code First para mantener el versionado de BD junto al código
-- Repository Pattern para desacoplar el acceso a datos de la lógica de negocio
+EduCore/
+├── backend/
+│   └── EduCore/
+│       ├── EduCore.API/
+│       │   ├── Controllers/
+│       │   │   └── AlumnoController.cs
+│       │   ├── appsettings.json
+│       │   └── Program.cs
+│       ├── EduCore.Business/
+│       │   ├── DTOs/
+│       │   │   ├── AlumnoDto.cs
+│       │   │   └── CrearAlumnoDto.cs
+│       │   ├── Entities/
+│       │   │   └── Alumno.cs
+│       │   ├── Interfaces/
+│       │   │   └── IAlumnoRepository.cs
+│       │   └── Services/
+│       │       └── AlumnoService.cs
+│       └── EduCore.Infrastructure/
+│           ├── Data/
+│           │   └── AppDbContext.cs
+│           ├── Migrations/
+│           └── Repositories/
+│               └── AlumnoRepository.cs
+└── frontend/                          ← próximamente
+```
