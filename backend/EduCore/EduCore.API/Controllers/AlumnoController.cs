@@ -1,4 +1,5 @@
-﻿using EduCore.Business.Services;
+﻿using EduCore.Business.DTOs;
+using EduCore.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduCore.API.Controllers
@@ -28,6 +29,13 @@ namespace EduCore.API.Controllers
             if (alumno == null)
                 return NotFound();
             return Ok(alumno);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Crear([FromBody] CrearAlumnoDto dto)
+        {
+            await _service.CrearAlumnoAsync(dto);
+            return Ok("Alumno creado correctamente");
         }
     }
 }
