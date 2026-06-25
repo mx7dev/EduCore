@@ -1,5 +1,6 @@
 ﻿using EduCore.Business.DTOs;
 using EduCore.Business.Services;
+using EduCore.Business.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduCore.API.Controllers
@@ -9,10 +10,12 @@ namespace EduCore.API.Controllers
     public class AlumnoController : ControllerBase
     {
         private readonly AlumnoService _service;
+        private readonly CrearAlumnoDtoValidator _validator;
 
-        public AlumnoController(AlumnoService service)
+        public AlumnoController(AlumnoService service, CrearAlumnoDtoValidator validator)
         {
             _service = service;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -34,6 +37,11 @@ namespace EduCore.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Crear([FromBody] CrearAlumnoDto dto)
         {
+            var resultado = await _validator.ValidateAsync(dto);
+
+            if (!resultado.IsValid)
+                return BadRequest(resultado.Errors.Select(e => e.ErrorMessage));
+
             await _service.CrearAlumnoAsync(dto);
             return Ok("Alumno creado correctamente");
         }

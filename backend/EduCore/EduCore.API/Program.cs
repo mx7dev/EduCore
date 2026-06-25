@@ -3,6 +3,7 @@ using EduCore.Business.Services;
 using EduCore.Infrastructure.Data;
 using EduCore.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,8 @@ builder.Services.AddScoped<AlumnoService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// ── Validadores ────────────────────────────────────────
+builder.Services.AddValidatorsFromAssemblyContaining<EduCore.Business.Validators.CrearAlumnoDtoValidator>();
 
 var app = builder.Build();
 
