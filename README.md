@@ -47,9 +47,15 @@ Este proyecto aplica una arquitectura de 3 capas:
 - Generación automática de código de alumno (año + correlativo)
 - API REST con Swagger
 
+### Fase 2 — Validaciones y manejo de errores
+- FluentValidation para validar DTOs de entrada
+- Excepciones personalizadas (`FunctionalException`, `TechnicalException`)
+- Manejo de errores controlado en controllers
+- Respuestas de error amigables con código, mensaje y transactionId
+- Validación de DNI duplicado antes de guardar
+
 ## 🔜 Próximas fases
 
-- **Fase 2** — Validaciones con FluentValidation y manejo de errores
 - **Fase 3** — Autenticación con JWT y roles
 - **Fase 4** — Foto de perfil
 - **Fase 5** — Historial de cambios y auditoría

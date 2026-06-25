@@ -1,5 +1,6 @@
 ﻿using EduCore.Business.DTOs;
 using EduCore.Business.Entities;
+using EduCore.Business.Exceptions;
 using EduCore.Business.Interfaces;
 
 namespace EduCore.Business.Services
@@ -28,14 +29,19 @@ namespace EduCore.Business.Services
 
         public async Task CrearAlumnoAsync(CrearAlumnoDto dto)
         {
-            // 1. Obtener siguiente correlativo
+            // Verificar DNI duplicado
+            var existe = await _repository.ExistePorDniAsync(dto.Dni);
+            if (existe)
+                throw new FunctionalException("DNI_DUPLICADO", $"Ya existe un alumno con el DNI {dto.Dni}");
+
+            // Obtener siguiente correlativo
             var correlativo = await _repository.ObtenerSiguienteCorrelativoAsync();
 
-            // 2. Generar código
+            // Generar código
             var año = DateTime.Now.Year.ToString().Substring(2, 2);
             var codigo = $"{año}{correlativo:D5}";
 
-            // 3. Crear el alumno
+            // Crear el alumno
             var alumno = new Alumno(
                 codigo,
                 dto.Dni,
@@ -50,7 +56,6 @@ namespace EduCore.Business.Services
                 dto.ContactoEmergenciaRelacion,
                 dto.CorreoPersonal);
 
-            // 4. Guardar
             await _repository.GuardarAsync(alumno);
         }
 

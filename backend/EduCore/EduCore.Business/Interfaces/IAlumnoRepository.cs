@@ -10,5 +10,6 @@ namespace EduCore.Business.Interfaces
         Task GuardarAsync(Alumno alumno);
         Task ActualizarAsync(Alumno alumno);
         Task EliminarAsync(int id);
+        Task<bool> ExistePorDniAsync(string dni);
     }
 }

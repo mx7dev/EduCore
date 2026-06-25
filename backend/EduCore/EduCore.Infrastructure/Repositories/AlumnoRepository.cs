@@ -55,5 +55,10 @@ namespace EduCore.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<bool> ExistePorDniAsync(string dni)
+        {
+            return await _context.Alumnos
+                .AnyAsync(a => a.Dni == dni);
+        }
     }
 }
