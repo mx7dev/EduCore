@@ -24,6 +24,7 @@ builder.Services.AddScoped<ICursoRepository, CursoRepository>();
 builder.Services.AddScoped<IPeriodoRepository, PeriodoRepository>();
 builder.Services.AddScoped<IGradoRepository, GradoRepository>();
 builder.Services.AddScoped<ISeccionRepository, SeccionRepository>();
+builder.Services.AddScoped<IMatriculaRepository, MatriculaRepository>();
 
 // ── Servicios de negocio ───────────────────────────────
 builder.Services.AddScoped<AlumnoService>();
@@ -33,6 +34,7 @@ builder.Services.AddScoped<CursoService>();
 builder.Services.AddScoped<PeriodoService>();
 builder.Services.AddScoped<GradoService>();
 builder.Services.AddScoped<SeccionService>();
+builder.Services.AddScoped<MatriculaService>();
 
 // ── API ────────────────────────────────────────────────
 builder.Services.AddControllers();
