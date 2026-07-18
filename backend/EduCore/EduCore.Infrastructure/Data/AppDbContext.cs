@@ -14,6 +14,7 @@ namespace EduCore.Infrastructure.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Profesor> Profesores { get; set; }
+        public DbSet<Curso> Cursos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -154,6 +155,28 @@ namespace EduCore.Infrastructure.Data
                     .IsUnique();
 
                 entity.HasIndex(p => p.CorreoElectronico)
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<Curso>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+
+                entity.Property(c => c.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(c => c.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(c => c.Descripcion)
+                    .HasMaxLength(500);
+
+                entity.HasIndex(c => c.Codigo)
+                    .IsUnique();
+
+                entity.HasIndex(c => c.Nombre)
                     .IsUnique();
             });
         }
