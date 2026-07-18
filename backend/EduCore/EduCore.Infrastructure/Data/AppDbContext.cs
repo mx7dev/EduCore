@@ -16,6 +16,8 @@ namespace EduCore.Infrastructure.Data
         public DbSet<Profesor> Profesores { get; set; }
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<Periodo> Periodos { get; set; }
+        public DbSet<Grado> Grados { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -192,6 +194,20 @@ namespace EduCore.Infrastructure.Data
                     .HasMaxLength(200);
 
                 entity.HasIndex(p => p.Año)
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<Grado>(entity =>
+            {
+                entity.HasKey(g => g.Id);
+
+                entity.Property(g => g.Numero)
+                    .IsRequired();
+
+                entity.Property(g => g.Nivel)
+                    .IsRequired();
+
+                entity.HasIndex(g => new { g.Numero, g.Nivel })
                     .IsUnique();
             });
         }
