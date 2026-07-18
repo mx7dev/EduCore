@@ -4,6 +4,7 @@ using EduCore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EduCore.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705224043_AddUsuarioAndRefreshToken")]
+    partial class AddUsuarioAndRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,18 +171,6 @@ namespace EduCore.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Usuarios");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Activo = true,
-                            Apellido = "EduCore",
-                            Email = "admin@educore.com",
-                            Nombre = "Admin",
-                            PasswordHash = "$2a$10$h1tpPwycbaWgzOCPwWkVZ./BZ/1y03bpTGwNJeDuqDEr2FD9tQJg6",
-                            Rol = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("EduCore.Business.Entities.RefreshToken", b =>

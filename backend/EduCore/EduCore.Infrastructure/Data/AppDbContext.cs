@@ -11,6 +11,8 @@ namespace EduCore.Infrastructure.Data
         }
 
         public DbSet<Alumno> Alumnos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +65,55 @@ namespace EduCore.Infrastructure.Data
 
                 entity.HasIndex(a => a.Codigo)
                     .IsUnique();
+            });
+
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+
+                entity.Property(u => u.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(u => u.Apellido)
+                    .HasMaxLength(100);
+
+                entity.Property(u => u.Email)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(u => u.PasswordHash)
+                    .IsRequired();
+
+                entity.Property(u => u.Rol)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasIndex(u => u.Email)
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(r => r.Id);
+
+                entity.Property(r => r.Token)
+                    .IsRequired();
+
+                entity.HasOne(r => r.Usuario)
+                    .WithMany()
+                    .HasForeignKey(r => r.UsuarioId);
+            });
+
+            modelBuilder.Entity<Usuario>().HasData(new
+            {
+                Id = 1,
+                Nombre = "Admin",
+                Apellido = "EduCore",
+                Email = "admin@educore.com",
+                PasswordHash = "$2a$10$h1tpPwycbaWgzOCPwWkVZ./BZ/1y03bpTGwNJeDuqDEr2FD9tQJg6",
+                Rol = "Admin",
+                Activo = true
             });
         }
     }

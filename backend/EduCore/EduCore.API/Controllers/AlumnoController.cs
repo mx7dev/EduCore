@@ -2,12 +2,14 @@
 using EduCore.Business.Exceptions;
 using EduCore.Business.Services;
 using EduCore.Business.Validators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EduCore.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AlumnoController : ControllerBase
     {
         private readonly AlumnoService _service;
