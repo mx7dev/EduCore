@@ -19,10 +19,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // ── Repositorios ───────────────────────────────────────
 builder.Services.AddScoped<IAlumnoRepository, AlumnoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IProfesorRepository, ProfesorRepository>();
 
 // ── Servicios de negocio ───────────────────────────────
 builder.Services.AddScoped<AlumnoService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ProfesorService>();
 
 // ── API ────────────────────────────────────────────────
 builder.Services.AddControllers();

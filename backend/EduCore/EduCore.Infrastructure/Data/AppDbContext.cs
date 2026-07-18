@@ -13,6 +13,7 @@ namespace EduCore.Infrastructure.Data
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Profesor> Profesores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -114,6 +115,46 @@ namespace EduCore.Infrastructure.Data
                 PasswordHash = "$2a$10$h1tpPwycbaWgzOCPwWkVZ./BZ/1y03bpTGwNJeDuqDEr2FD9tQJg6",
                 Rol = "Admin",
                 Activo = true
+            });
+
+            modelBuilder.Entity<Profesor>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+
+                entity.Property(p => p.Dni)
+                    .IsRequired()
+                    .HasMaxLength(8);
+
+                entity.Property(p => p.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(p => p.ApellidoPaterno)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(p => p.ApellidoMaterno)
+                    .HasMaxLength(50);
+
+                entity.Property(p => p.Especialidad)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(p => p.CorreoElectronico)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(p => p.Direccion)
+                    .HasMaxLength(150);
+
+                entity.Property(p => p.NumeroCelular)
+                    .HasMaxLength(15);
+
+                entity.HasIndex(p => p.Dni)
+                    .IsUnique();
+
+                entity.HasIndex(p => p.CorreoElectronico)
+                    .IsUnique();
             });
         }
     }
