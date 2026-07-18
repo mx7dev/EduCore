@@ -18,6 +18,8 @@ namespace EduCore.Infrastructure.Data
         public DbSet<Periodo> Periodos { get; set; }
         public DbSet<Grado> Grados { get; set; }
 
+        public DbSet<Seccion> Secciones { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -208,6 +210,29 @@ namespace EduCore.Infrastructure.Data
                     .IsRequired();
 
                 entity.HasIndex(g => new { g.Numero, g.Nivel })
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<Seccion>(entity =>
+            {
+                entity.HasKey(s => s.Id);
+
+                entity.Property(s => s.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(s => s.Turno)
+                    .IsRequired();
+
+                entity.HasOne(s => s.Grado)
+                    .WithMany()
+                    .HasForeignKey(s => s.GradoId);
+
+                entity.HasOne(s => s.Periodo)
+                    .WithMany()
+                    .HasForeignKey(s => s.PeriodoId);
+
+                entity.HasIndex(s => new { s.Nombre, s.GradoId, s.PeriodoId })
                     .IsUnique();
             });
         }
