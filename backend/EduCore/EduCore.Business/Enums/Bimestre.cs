@@ -1,0 +1,11 @@
+﻿
+namespace EduCore.Business.Enums
+{
+    public enum Bimestre
+    {
+        B1 = 1,
+        B2 = 2,
+        B3 = 3,
+        B4 = 4
+    }
+}

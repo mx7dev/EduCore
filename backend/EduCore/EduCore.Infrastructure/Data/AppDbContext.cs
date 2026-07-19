@@ -19,6 +19,7 @@ namespace EduCore.Infrastructure.Data
         public DbSet<Grado> Grados { get; set; }
         public DbSet<Seccion> Secciones { get; set; }
         public DbSet<Matricula> Matriculas { get; set; }
+        public DbSet<Nota> Notas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -249,6 +250,28 @@ namespace EduCore.Infrastructure.Data
                     .HasForeignKey(m => m.SeccionId);
 
                 entity.HasIndex(m => new { m.AlumnoId, m.SeccionId })
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<Nota>(entity =>
+            {
+                entity.HasKey(n => n.Id);
+
+                entity.Property(n => n.Calificacion)
+                    .HasPrecision(4, 2);
+
+                entity.Property(n => n.Comentario)
+                    .HasMaxLength(500);
+
+                entity.HasOne(n => n.Matricula)
+                    .WithMany()
+                    .HasForeignKey(n => n.MatriculaId);
+
+                entity.HasOne(n => n.Curso)
+                    .WithMany()
+                    .HasForeignKey(n => n.CursoId);
+
+                entity.HasIndex(n => new { n.MatriculaId, n.CursoId, n.Bimestre })
                     .IsUnique();
             });
         }
