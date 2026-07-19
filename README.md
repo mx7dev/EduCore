@@ -1,43 +1,45 @@
 # EduCore 🎓
 
-Sistema de gestión educativa para colegios construido con **.NET 10** y **Angular** aplicando arquitectura en capas.
+Sistema de gestión educativa para colegios construido con **.NET 10** y **Angular 22** aplicando arquitectura en capas.
 
-## 🏗️ Arquitectura
+## 🏗️ Arquitectura Backend
 
-Este proyecto aplica una arquitectura en **3 capas (N-Tier) con influencias de Clean Architecture**:
+Arquitectura en **3 capas (N-Tier) con influencias de Clean Architecture**:
 
 - **EduCore.API** — capa de presentación (Controllers, REST API)
-- **EduCore.Business** — capa de negocio (Servicios, Entidades, Reglas, DTOs, Validadores)
+- **EduCore.Business** — capa de negocio (Servicios, Entidades, Reglas, DTOs)
 - **EduCore.Infrastructure** — capa de datos (Repositorios, Entity Framework Core)
 
+## 🏗️ Arquitectura Frontend
+
+Estructura **Feature-based** con Angular 22:
+
 ```
-┌─────────────────────────────────┐
-│         EduCore.API             │
-│   (Controllers, Swagger)        │
-└────────────────┬────────────────┘
-                 │
-┌────────────────▼────────────────┐
-│       EduCore.Business          │
-│  (Services, Entities, DTOs)     │
-└────────────────┬────────────────┘
-                 │
-┌────────────────▼────────────────┐
-│     EduCore.Infrastructure      │
-│  (Repositories, EF Core, BD)    │
-└─────────────────────────────────┘
+src/app/
+├── core/          ← guards, interceptors, services
+├── shared/        ← componentes reutilizables
+├── features/      ← módulos por funcionalidad
+└── layout/        ← sidebar, navbar
 ```
 
 ## 🛠️ Tecnologías
 
+**Backend:**
 - .NET 10
 - ASP.NET Core Web API
 - Entity Framework Core (Code First)
 - SQL Server
 - Swagger / OpenAPI
-- BCrypt.Net para hash de contraseñas
+- BCrypt.Net
 - FluentValidation
 - JWT + Refresh Token
-- Angular (próximamente)
+
+**Frontend:**
+- Angular 22 (Standalone Components)
+- PrimeNG 22 + PrimeFlex (Community License)
+- Signal Forms (`@angular/forms/signals`)
+- `httpResource` para llamadas HTTP reactivas
+- Signals para manejo de estado
 
 ## ✅ Fases completadas
 
@@ -46,142 +48,86 @@ Este proyecto aplica una arquitectura en **3 capas (N-Tier) con influencias de C
 - Entidad `Alumno` con encapsulamiento y reglas de dominio
 - Repository Pattern con interfaz desacoplada
 - Inyección de dependencias (Scoped)
-- DTOs para entrada (`CrearAlumnoDto`) y salida (`AlumnoDto`)
-- Generación automática de código de alumno (año + correlativo)
+- DTOs para entrada y salida
+- Generación automática de código de alumno
 - API REST con Swagger
 
 ### Fase 2 — Validaciones y manejo de errores
-- FluentValidation para validar DTOs de entrada
+- FluentValidation para validar DTOs
 - Excepciones personalizadas (`FunctionalException`, `TechnicalException`)
 - Manejo de errores controlado en controllers
-- Respuestas de error amigables con código, mensaje y transactionId
-- Validación de DNI duplicado antes de guardar
+- Respuestas de error con código, mensaje y transactionId
 
 ### Fase 3 — Autenticación y Autorización
-- JWT (JSON Web Token) para autenticación
-- Refresh Token para renovar sesión sin relogueo
+- JWT + Refresh Token
 - Roles: Admin, Secretaria, Docente
 - Endpoints protegidos con `[Authorize]`
-- Seed Data con usuario Admin inicial
+- Seed Data con usuario Admin
 - Hash de contraseñas con BCrypt
-- ⚠️ **Nota**: Swagger UI tiene un bug conocido con JWT en .NET 10 + Swashbuckle 10.x donde el token no se envía en el header. Se recomienda usar Postman para probar endpoints protegidos, o migrar a Scalar en proyectos nuevos. Ver issues: [#3740](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/3740) y [#3648](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/3648)
+- ⚠️ Swagger UI tiene bug con JWT en .NET 10 + Swashbuckle 10.x — usar Postman
 
-### Fase 4 — Módulos académicos
-- CRUD de Profesores con validaciones
-- CRUD de Cursos con código autogenerado
-- Periodos académicos con regla de solo un periodo activo
-- Grados con enum NivelEducativo (Primaria/Secundaria) y validaciones de negocio
-- Secciones con proyecciones optimizadas (sin Include, sin over-fetching)
-- Matrícula de alumnos con validación de duplicado por periodo
-- Registro de notas por bimestre (B1, B2, B3, B4)
-- Libreta de notas con nota final calculada automáticamente
+### Fase 4 — Módulos académicos (Backend)
+- CRUD Profesores, Cursos, Periodos, Grados, Secciones
+- Matrícula con validación de duplicado
+- Notas por bimestre con libreta calculada automáticamente
+- Proyecciones optimizadas en Secciones (sin over-fetching)
+
+### Fase 5 — Frontend Angular 22
+- Layout con Sidebar y Navbar
+- Login conectado al backend con Toast de errores
+- Auth Guard para protección de rutas
+- Auth Interceptor para envío automático del token JWT
+- Listado de alumnos con `httpResource` (Angular 22)
+- Formulario de nuevo alumno con Signal Forms
+- DatePicker en español con PrimeNG 22
 
 ## 🔜 Próximas fases
 
-- **Fase 5** — Foto de perfil del alumno
-- **Fase 6** — Frontend Angular
+- **Fase 6** — Pantallas de Profesores, Cursos, Matrícula y Notas
+- **Fase 7** — Foto de perfil
+- **Fase 8** — Logout y gestión de sesión
 
 ## 🚀 Cómo ejecutar
 
-### Requisitos previos
-- .NET 10 SDK
-- SQL Server (local o Docker)
-- Visual Studio 2026 o VS Code
-- Postman (para probar endpoints protegidos con JWT)
+### Backend
 
-### Pasos
-
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/mx7dev/EduCore.git
-   ```
-
-2. Configura la cadena de conexión en `backend/EduCore/EduCore.API/appsettings.json`:
-   ```json
-   {
-     "ConnectionStrings": {
-       "DefaultConnection": "Server=localhost,1433;Database=EduCoreDb;User Id=sa;Password=TuPassword;TrustServerCertificate=True"
-     },
-     "JwtSettings": {
-       "SecretKey": "TuSecretKeyMuyLargaYSegura123!",
-       "Issuer": "EduCore.API",
-       "Audience": "EduCore.Client",
-       "ExpirationMinutes": 60
-     }
-   }
-   ```
-
-3. Ejecuta las migraciones:
+1. Configura `appsettings.json` con tu cadena de conexión y JwtSettings
+2. Ejecuta migraciones:
    ```bash
    cd backend/EduCore/EduCore.API
    dotnet ef database update --project ../EduCore.Infrastructure --startup-project .
    ```
-
-4. Corre la API:
+3. Corre la API:
    ```bash
    dotnet run --project backend/EduCore/EduCore.API
    ```
 
-5. Abre Swagger en:
-   ```
-   https://localhost:7208/swagger
-   ```
+### Frontend
 
-6. Para probar endpoints protegidos usa Postman:
-   - `POST https://localhost:7208/api/Auth/login` con `{ "email": "admin@educore.com", "password": "Admin123!" }`
-   - Copia el token y úsalo como Bearer Token en los siguientes requests
+1. Copia `environment.example.ts` como `environment.ts` y configura tu license key de PrimeNG
+2. Instala dependencias:
+   ```bash
+   cd frontend/educore-front
+   npm install
+   ```
+3. Corre el frontend:
+   ```bash
+   ng serve
+   ```
+4. Abre `http://localhost:4200` — credenciales: `admin@educore.com` / `Admin123!`
 
 ## 📐 Decisiones arquitectónicas
 
-| Decisión | Alternativa considerada | Razón |
+| Decisión | Alternativa | Razón |
 |---|---|---|
-| Arquitectura en 3 capas | DDD, Hexagonal | Dominio simple, equipo pequeño, sin necesidad de over-engineering |
-| Sistema para colegio | Instituto | Dominio más acotado y predecible, todos los colegios funcionan igual |
-| Code First | Database First | Versionado de BD junto al código, fácil de clonar y ejecutar |
-| Repository Pattern | Acceso directo con DbContext | Desacoplar lógica de negocio del acceso a datos |
-| DTOs separados | Exponer entidades directamente | Seguridad, no exponer estructura interna de BD |
-| Scoped lifetime | Singleton, Transient | Cada request HTTP tiene su propia instancia del DbContext |
-| BCrypt en Business | Infrastructure | El hasheo es responsabilidad del negocio, no de la infraestructura |
-| Swagger sobre Scalar | Scalar | Swagger es el estándar conocido; en proyectos futuros se usará Scalar por su compatibilidad nativa con .NET 10 |
-| Refresh Token | Solo JWT | Mejor experiencia de usuario sin sacrificar seguridad |
-| Proyecciones en Seccion | Include completo | Evitar over-fetching, traer solo los campos necesarios |
-| Enum para Nivel y Turno | Tabla en BD | Valores fijos que no cambian — YAGNI |
-| MatriculaId en Nota | AlumnoId + SeccionId | Garantiza que el alumno está matriculado antes de registrar nota |
-
-## 📁 Estructura del proyecto
-
-```
-EduCore/
-├── backend/
-│   └── EduCore/
-│       ├── EduCore.API/
-│       │   ├── Controllers/
-│       │   │   ├── AlumnoController.cs
-│       │   │   ├── AuthController.cs
-│       │   │   ├── CursoController.cs
-│       │   │   ├── GradoController.cs
-│       │   │   ├── MatriculaController.cs
-│       │   │   ├── NotaController.cs
-│       │   │   ├── PeriodoController.cs
-│       │   │   ├── ProfesorController.cs
-│       │   │   └── SeccionController.cs
-│       │   ├── appsettings.json
-│       │   └── Program.cs
-│       ├── EduCore.Business/
-│       │   ├── DTOs/
-│       │   ├── Entities/
-│       │   ├── Enums/
-│       │   │   ├── Bimestre.cs
-│       │   │   ├── NivelEducativo.cs
-│       │   │   └── Turno.cs
-│       │   ├── Exceptions/
-│       │   ├── Interfaces/
-│       │   ├── Services/
-│       │   └── Validators/
-│       └── EduCore.Infrastructure/
-│           ├── Data/
-│           │   └── AppDbContext.cs
-│           ├── Migrations/
-│           └── Repositories/
-└── frontend/                          ← próximamente
-```
+| 3 capas N-Tier | DDD, Hexagonal | Dominio simple, YAGNI |
+| Sistema para colegio | Instituto | Dominio más acotado y predecible |
+| Code First | Database First | Versionado junto al código |
+| Repository Pattern | DbContext directo | Desacoplar datos del negocio |
+| Scoped lifetime | Singleton | Cada request tiene su propio DbContext |
+| JWT + Refresh Token | Solo JWT | Mejor UX sin sacrificar seguridad |
+| httpResource | subscribe/RxJS | Estándar Angular 22, sin boilerplate |
+| Signal Forms | ReactiveFormsModule | Estándar Angular 22 estable |
+| PrimeNG 22 Community | Angular Material | Mejor diseño para sistemas enterprise |
+| Swagger sobre Scalar | Scalar | Bug conocido en .NET 10 — migrar a Scalar en próximos proyectos |
+| Proyecciones en Secciones | Include completo | Evitar over-fetching |
