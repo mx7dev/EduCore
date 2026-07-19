@@ -1,1 +1,50 @@
-<p>alumno-list works!</p>
+<div class="page-header">
+  <h2>Alumnos</h2>
+  <p-button 
+    label="Nuevo Alumno" 
+    icon="pi pi-plus"
+    (onClick)="abrirFormulario()" />
+</div>
+
+<p-table 
+  [value]="alumnos.value() ?? []" 
+  [loading]="alumnos.isLoading()"
+  [paginator]="true"
+  [rows]="10"
+  styleClass="p-datatable-striped">
+  
+  <ng-template #header>
+    <tr>
+      <th>Código</th>
+      <th>DNI</th>
+      <th>Nombre</th>
+      <th>Apellidos</th>
+      <th>Correo</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-alumno>
+    <tr>
+      <td>{{ alumno.codigo }}</td>
+      <td>{{ alumno.dni }}</td>
+      <td>{{ alumno.nombre }}</td>
+      <td>{{ alumno.apellidoPaterno }} {{ alumno.apellidoMaterno }}</td>
+      <td>{{ alumno.correoPersonal }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-trash" 
+          severity="danger"
+          [text]="true"
+          (onClick)="eliminar(alumno.id)" />
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #empty>
+    <tr>
+      <td colspan="6" class="text-center">No hay alumnos registrados</td>
+    </tr>
+  </ng-template>
+
+</p-table>
