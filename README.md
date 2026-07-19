@@ -1,13 +1,13 @@
 # EduCore 🎓
 
-Sistema de gestión educativa construido con **.NET 10** y **Angular** aplicando arquitectura en capas.
+Sistema de gestión educativa para colegios construido con **.NET 10** y **Angular** aplicando arquitectura en capas.
 
 ## 🏗️ Arquitectura
 
-Este proyecto aplica una arquitectura de 3 capas:
+Este proyecto aplica una arquitectura en **3 capas (N-Tier) con influencias de Clean Architecture**:
 
 - **EduCore.API** — capa de presentación (Controllers, REST API)
-- **EduCore.Business** — capa de negocio (Servicios, Entidades, Reglas, DTOs)
+- **EduCore.Business** — capa de negocio (Servicios, Entidades, Reglas, DTOs, Validadores)
 - **EduCore.Infrastructure** — capa de datos (Repositorios, Entity Framework Core)
 
 ```
@@ -66,12 +66,20 @@ Este proyecto aplica una arquitectura de 3 capas:
 - Hash de contraseñas con BCrypt
 - ⚠️ **Nota**: Swagger UI tiene un bug conocido con JWT en .NET 10 + Swashbuckle 10.x donde el token no se envía en el header. Se recomienda usar Postman para probar endpoints protegidos, o migrar a Scalar en proyectos nuevos. Ver issues: [#3740](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/3740) y [#3648](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/3648)
 
+### Fase 4 — Módulos académicos
+- CRUD de Profesores con validaciones
+- CRUD de Cursos con código autogenerado
+- Periodos académicos con regla de solo un periodo activo
+- Grados con enum NivelEducativo (Primaria/Secundaria) y validaciones de negocio
+- Secciones con proyecciones optimizadas (sin Include, sin over-fetching)
+- Matrícula de alumnos con validación de duplicado por periodo
+- Registro de notas por bimestre (B1, B2, B3, B4)
+- Libreta de notas con nota final calculada automáticamente
+
 ## 🔜 Próximas fases
 
-- **Fase 4** — Foto de perfil
-- **Fase 5** — Historial de cambios y auditoría
-- **Fase 6** — Notificaciones
-- **Fase 7** — Reportes
+- **Fase 5** — Foto de perfil del alumno
+- **Fase 6** — Frontend Angular
 
 ## 🚀 Cómo ejecutar
 
@@ -128,6 +136,7 @@ Este proyecto aplica una arquitectura de 3 capas:
 | Decisión | Alternativa considerada | Razón |
 |---|---|---|
 | Arquitectura en 3 capas | DDD, Hexagonal | Dominio simple, equipo pequeño, sin necesidad de over-engineering |
+| Sistema para colegio | Instituto | Dominio más acotado y predecible, todos los colegios funcionan igual |
 | Code First | Database First | Versionado de BD junto al código, fácil de clonar y ejecutar |
 | Repository Pattern | Acceso directo con DbContext | Desacoplar lógica de negocio del acceso a datos |
 | DTOs separados | Exponer entidades directamente | Seguridad, no exponer estructura interna de BD |
@@ -135,6 +144,9 @@ Este proyecto aplica una arquitectura de 3 capas:
 | BCrypt en Business | Infrastructure | El hasheo es responsabilidad del negocio, no de la infraestructura |
 | Swagger sobre Scalar | Scalar | Swagger es el estándar conocido; en proyectos futuros se usará Scalar por su compatibilidad nativa con .NET 10 |
 | Refresh Token | Solo JWT | Mejor experiencia de usuario sin sacrificar seguridad |
+| Proyecciones en Seccion | Include completo | Evitar over-fetching, traer solo los campos necesarios |
+| Enum para Nivel y Turno | Tabla en BD | Valores fijos que no cambian — YAGNI |
+| MatriculaId en Nota | AlumnoId + SeccionId | Garantiza que el alumno está matriculado antes de registrar nota |
 
 ## 📁 Estructura del proyecto
 
@@ -145,36 +157,31 @@ EduCore/
 │       ├── EduCore.API/
 │       │   ├── Controllers/
 │       │   │   ├── AlumnoController.cs
-│       │   │   └── AuthController.cs
+│       │   │   ├── AuthController.cs
+│       │   │   ├── CursoController.cs
+│       │   │   ├── GradoController.cs
+│       │   │   ├── MatriculaController.cs
+│       │   │   ├── NotaController.cs
+│       │   │   ├── PeriodoController.cs
+│       │   │   ├── ProfesorController.cs
+│       │   │   └── SeccionController.cs
 │       │   ├── appsettings.json
 │       │   └── Program.cs
 │       ├── EduCore.Business/
 │       │   ├── DTOs/
-│       │   │   ├── AlumnoDto.cs
-│       │   │   ├── CrearAlumnoDto.cs
-│       │   │   ├── LoginDto.cs
-│       │   │   └── TokenResponseDto.cs
 │       │   ├── Entities/
-│       │   │   ├── Alumno.cs
-│       │   │   ├── RefreshToken.cs
-│       │   │   └── Usuario.cs
+│       │   ├── Enums/
+│       │   │   ├── Bimestre.cs
+│       │   │   ├── NivelEducativo.cs
+│       │   │   └── Turno.cs
 │       │   ├── Exceptions/
-│       │   │   ├── FunctionalException.cs
-│       │   │   └── TechnicalException.cs
 │       │   ├── Interfaces/
-│       │   │   ├── IAlumnoRepository.cs
-│       │   │   └── IUsuarioRepository.cs
 │       │   ├── Services/
-│       │   │   ├── AlumnoService.cs
-│       │   │   └── AuthService.cs
 │       │   └── Validators/
-│       │       └── CrearAlumnoDtoValidator.cs
 │       └── EduCore.Infrastructure/
 │           ├── Data/
 │           │   └── AppDbContext.cs
 │           ├── Migrations/
 │           └── Repositories/
-│               ├── AlumnoRepository.cs
-│               └── UsuarioRepository.cs
 └── frontend/                          ← próximamente
 ```
