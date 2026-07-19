@@ -13,17 +13,15 @@ import { filter } from 'rxjs/operators';
 export class App {
   private rutaActual = signal('');
 
-  mostrarLayout = computed(() => 
+  mostrarLayout = computed(() =>
     !this.rutaActual().includes('login')
   );
 
   constructor(private router: Router) {
-  this.rutaActual.set(this.router.url); // <- agrega esta línea
-  
-  this.router.events
-    .pipe(filter(e => e instanceof NavigationEnd))
-    .subscribe((e: NavigationEnd) => {
-      this.rutaActual.set(e.url);
-    });
-}
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: NavigationEnd) => {
+        this.rutaActual.set(e.url);
+      });
+  }
 }
