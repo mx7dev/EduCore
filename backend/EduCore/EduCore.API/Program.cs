@@ -62,7 +62,16 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
+// ── CORS ──────────────────────────────────────────────
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("EduCorePolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // ── Validadores ────────────────────────────────────────
 builder.Services.AddValidatorsFromAssemblyContaining<EduCore.Business.Validators.CrearAlumnoDtoValidator>();
@@ -103,6 +112,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("EduCorePolicy");
 app.UseAuthentication();   // primero autenticación
 app.UseAuthorization();    // luego autorización
 app.MapControllers();
