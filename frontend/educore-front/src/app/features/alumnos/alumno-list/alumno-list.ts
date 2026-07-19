@@ -3,18 +3,22 @@ import { AlumnoDto, AlumnoService } from '../../../core/services/alumno';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { httpResource } from '@angular/common/http';
+import { AlumnoForm } from '../alumno-form/alumno-form';
 
 @Component({
   selector: 'app-alumno-list',
-  imports: [Button, TableModule],
+  imports: [Button, TableModule,AlumnoForm],
   templateUrl: './alumno-list.html',
   styleUrl: './alumno-list.scss'
 })
 export class AlumnoList {
   private alumnoService = inject(AlumnoService);
   alumnos = httpResource<AlumnoDto[]>(() => this.alumnoService.apiUrl);
+  mostrarFormulario = false;
 
-  abrirFormulario() {}
+  abrirFormulario() {
+    this.mostrarFormulario = true;
+  }
 
   eliminar(id: number) {
     if (confirm('¿Estás seguro de eliminar este alumno?')) {

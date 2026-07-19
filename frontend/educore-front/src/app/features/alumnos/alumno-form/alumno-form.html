@@ -1,0 +1,63 @@
+<p-dialog header="Nuevo Alumno" [(visible)]="visible" [modal]="true" [style]="{ width: '600px' }" (onHide)="cerrar()">
+
+    <div class="form-grid">
+        <div class="field">
+            <label>DNI *</label>
+            <input pInputText [formField]="formulario.dni" placeholder="12345678" class="w-full" />
+            @if (formulario.dni().invalid() && formulario.dni().touched()) {
+            <small class="error">{{ formulario.dni().errors()[0]?.message }}</small>
+            }
+        </div>
+
+        <div class="field">
+            <label>Nombre *</label>
+            <input pInputText [formField]="formulario.nombre" class="w-full" />
+            @if (formulario.nombre().invalid() && formulario.nombre().touched()) {
+            <small class="error">{{ formulario.nombre().errors()[0]?.message }}</small>
+            }
+        </div>
+
+        <div class="field">
+            <label>Apellido Paterno *</label>
+            <input pInputText [formField]="formulario.apellidoPaterno" class="w-full" />
+            @if (formulario.apellidoPaterno().invalid() && formulario.apellidoPaterno().touched()) {
+            <small class="error">{{ formulario.apellidoPaterno().errors()[0]?.message }}</small>
+            }
+        </div>
+
+        <div class="field">
+            <label>Apellido Materno</label>
+            <input pInputText [formField]="formulario.apellidoMaterno" class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Fecha de Nacimiento</label>
+            <p-datepicker 
+    [(ngModel)]="fechaNacimiento"
+    dateFormat="dd/mm/yy"
+    [showIcon]="true"
+    appendTo="body"
+    class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Celular</label>
+            <input pInputText [formField]="formulario.numeroCelular" class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Correo Personal</label>
+            <input pInputText [formField]="formulario.correoPersonal" class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Dirección</label>
+            <input pInputText [formField]="formulario.direccion" class="w-full" />
+        </div>
+    </div>
+
+    <ng-template #footer>
+        <p-button label="Cancelar" severity="secondary" (onClick)="cerrar()" />
+        <p-button label="Guardar" [loading]="guardando" (onClick)="guardar()" />
+    </ng-template>
+</p-dialog>
