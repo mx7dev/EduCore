@@ -17,11 +17,13 @@ export class App {
     !this.rutaActual().includes('login')
   );
 
-  constructor(private router: Router) {
-    this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe((e: NavigationEnd) => {
-        this.rutaActual.set(e.url);
-      });
-  }
+ constructor(private router: Router) {
+  this.rutaActual.set(this.router.url);
+  
+  this.router.events
+    .pipe(filter(e => e instanceof NavigationEnd))
+    .subscribe((e: NavigationEnd) => {
+      this.rutaActual.set(e.url);
+    });
+}
 }

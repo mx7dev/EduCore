@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component,inject  } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
+import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-navbar',
@@ -8,4 +9,15 @@ import { Tooltip } from 'primeng/tooltip';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
-export class Navbar {}
+export class Navbar {
+    private authService = inject(AuthService);
+
+  get userName() {
+    return this.authService.currentUser();
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+
+}

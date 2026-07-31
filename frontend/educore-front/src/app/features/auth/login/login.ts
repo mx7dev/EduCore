@@ -16,8 +16,8 @@ import { Toast } from 'primeng/toast';
   styleUrl: './login.scss'
 })
 export class Login {
-  email = '';
-  password = '';
+  email = 'admin@educore.com';
+  password = 'Admin123!';
   cargando = false;
 
   constructor(

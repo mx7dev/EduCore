@@ -5,12 +5,13 @@
   <div class="navbar-right">
     <span class="navbar-user">
       <i class="pi pi-user"></i>
-      Admin EduCore
+      {{ userName }}
     </span>
     <p-button 
       icon="pi pi-sign-out" 
       severity="secondary" 
       [text]="true"
-      pTooltip="Cerrar sesión" />
+      pTooltip="Cerrar sesión"
+      (onClick)="logout()" />
   </div>
 </div>
