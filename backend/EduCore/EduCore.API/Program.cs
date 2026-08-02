@@ -92,28 +92,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!))
         };
-
-
-        options.Events = new JwtBearerEvents
-        {
-            OnTokenValidated = context =>
-            {
-                var token = context.SecurityToken as Microsoft.IdentityModel.Tokens.SecurityToken;
-                if (token != null)
-                {
-                    Console.WriteLine($"Token válido");
-                    Console.WriteLine($"Expira (UTC): {token.ValidTo}");
-                    Console.WriteLine($"DateTime.UtcNow: {DateTime.UtcNow}");
-                    Console.WriteLine($"¿Expirado?: {token.ValidTo < DateTime.UtcNow}");
-                }
-                return Task.CompletedTask;
-            },
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"Token inválido: {context.Exception.Message}");
-                return Task.CompletedTask;
-            }
-        };
     });
 
 var app = builder.Build();
