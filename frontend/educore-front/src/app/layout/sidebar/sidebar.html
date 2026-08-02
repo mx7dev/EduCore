@@ -1,9 +1,13 @@
 <div class="sidebar">
   <div class="sidebar-header">
-    <span class="sidebar-logo">🎓 EduCore</span>
+    <div>
+      <div class="sidebar-logo">🎓 EduCore</div>
+      <div class="sidebar-subtitle">Sistema Escolar</div>
+    </div>
   </div>
 
   <div class="sidebar-menu">
+    <div class="menu-label">Principal</div>
     <ul>
       <li>
         <a routerLink="/alumnos" routerLinkActive="active">
@@ -23,6 +27,10 @@
           <span>Cursos</span>
         </a>
       </li>
+    </ul>
+
+    <div class="menu-label">Académico</div>
+    <ul>
       <li>
         <a routerLink="/matricula" routerLinkActive="active">
           <i class="pi pi-file-edit"></i>
@@ -36,5 +44,9 @@
         </a>
       </li>
     </ul>
+  </div>
+
+  <div class="sidebar-footer">
+    EduCore v1.0 © 2026
   </div>
 </div>
