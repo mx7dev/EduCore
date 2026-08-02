@@ -1,0 +1,54 @@
+<div class="page-header">
+  <h2>Profesores</h2>
+  <p-button 
+    label="Nuevo Profesor" 
+    icon="pi pi-plus"
+    (onClick)="abrirFormulario()" />
+</div>
+
+<p-table 
+  [value]="profesores"
+  [loading]="profesoresResponse.isLoading()"
+  [paginator]="true"
+  [rows]="10"
+  styleClass="p-datatable-striped">
+  
+  <ng-template #header>
+    <tr>
+      <th>DNI</th>
+      <th>Nombre</th>
+      <th>Apellidos</th>
+      <th>Especialidad</th>
+      <th>Correo</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-profesor>
+    <tr>
+      <td>{{ profesor.dni }}</td>
+      <td>{{ profesor.nombre }}</td>
+      <td>{{ profesor.apellidoPaterno }} {{ profesor.apellidoMaterno }}</td>
+      <td>{{ profesor.especialidad }}</td>
+      <td>{{ profesor.correoElectronico }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-trash" 
+          severity="danger"
+          [text]="true"
+          (onClick)="eliminar(profesor.id)" />
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #empty>
+    <tr>
+      <td colspan="6" class="text-center">No hay profesores registrados</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-profesor-form 
+  [visible]="mostrarFormulario"
+  (visibleChange)="mostrarFormulario = $event"
+ (profesorGuardado)="profesoresResponse.reload()"/>

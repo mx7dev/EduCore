@@ -1,0 +1,58 @@
+<p-dialog 
+  header="Nuevo Profesor"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  (onHide)="cerrar()">
+
+  <div class="form-grid">
+    <div class="field">
+      <label>DNI *</label>
+      <input pInputText [formField]="formulario.dni" placeholder="12345678" class="w-full" />
+      @if (formulario.dni().invalid() && formulario.dni().touched()) {
+        <small class="error">{{ formulario.dni().errors()[0]?.message }}</small>
+      }
+    </div>
+
+    <div class="field">
+      <label>Nombre *</label>
+      <input pInputText [formField]="formulario.nombre" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Apellido Paterno *</label>
+      <input pInputText [formField]="formulario.apellidoPaterno" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Apellido Materno</label>
+      <input pInputText [formField]="formulario.apellidoMaterno" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Especialidad *</label>
+      <input pInputText [formField]="formulario.especialidad" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Correo Electrónico *</label>
+      <input pInputText [formField]="formulario.correoElectronico" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Celular</label>
+      <input pInputText [formField]="formulario.numeroCelular" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Dirección</label>
+      <input pInputText [formField]="formulario.direccion" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" (onClick)="cerrar()" />
+    <p-button label="Guardar" [loading]="guardando" (onClick)="guardar()" />
+  </ng-template>
+</p-dialog>
+<p-toast/>

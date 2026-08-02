@@ -1,7 +1,8 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Sidebar } from './layout/sidebar/sidebar';
 import { Navbar } from './layout/navbar/navbar';
+import { AuthService } from './core/services/auth';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -11,19 +12,17 @@ import { filter } from 'rxjs/operators';
   styleUrl: './app.scss'
 })
 export class App {
-  private rutaActual = signal('');
+  private authService = inject(AuthService);
 
-  mostrarLayout = computed(() =>
-    !this.rutaActual().includes('login')
-  );
+  mostrarLayout = computed(() => this.authService.isAuthenticated());
 
- constructor(private router: Router) {
-  this.rutaActual.set(this.router.url);
-  
-  this.router.events
-    .pipe(filter(e => e instanceof NavigationEnd))
-    .subscribe((e: NavigationEnd) => {
-      this.rutaActual.set(e.url);
-    });
-}
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: NavigationEnd) => {
+        if (!this.authService.isAuthenticated()) {
+          this.router.navigate(['/login']);
+        }
+      });
+  }
 }

@@ -22,67 +22,102 @@ namespace EduCore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtenerTodos()
+        public async Task<JsonResult> ObtenerTodos()
         {
+            ResponseDto response;
             try
             {
                 var alumnos = await _service.ObtenerTodosAsync();
-                return Ok(alumnos);
+                response = new ResponseDto { Success = true, Data = alumnos };
             }
             catch (TechnicalException ex)
             {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObtenerPorId(int id)
+        public async Task<JsonResult> ObtenerPorId(int id)
         {
+            ResponseDto response;
             try
             {
                 var alumno = await _service.ObtenerPorIdAsync(id);
                 if (alumno == null)
-                    return NotFound(new { error = $"No se encontró alumno con ID {id}" });
-                return Ok(alumno);
+                    response = new ResponseDto { Success = false, Message = $"No se encontró alumno con ID {id}" };
+                else
+                    response = new ResponseDto { Success = true, Data = alumno };
             }
             catch (TechnicalException ex)
             {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear([FromBody] CrearAlumnoDto dto)
+        public async Task<JsonResult> Crear(CrearAlumnoDto dto)
         {
+            ResponseDto response;
+
             var resultado = await _validator.ValidateAsync(dto);
             if (!resultado.IsValid)
-                return BadRequest(resultado.Errors.Select(e => e.ErrorMessage));
+            {
+                response = new ResponseDto { Success = false, Message = string.Join(", ", resultado.Errors.Select(e => e.ErrorMessage)) };
+                return new JsonResult(response);
+            }
 
             try
             {
                 await _service.CrearAlumnoAsync(dto);
-                return Ok("Alumno creado correctamente");
+                response = new ResponseDto { Success = true, Message = "Alumno creado correctamente" };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (TechnicalException ex)
             {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<JsonResult> Eliminar(int id)
+        {
+            ResponseDto response;
+            try
+            {
+                await _service.EliminarAsync(id);
+                response = new ResponseDto { Success = true, Message = "Alumno eliminado correctamente" };
+            }
+            catch (FunctionalException ex)
+            {
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
+            }
+            catch (TechnicalException ex)
+            {
+                response = new ResponseDto { Success = false, Message = ex.Message, TransactionId = ex.TransactionId };
+            }
+            catch (Exception ex)
+            {
+                response = new ResponseDto { Success = false, Message = ex.Message };
+            }
+            return new JsonResult(response);
         }
     }
 }

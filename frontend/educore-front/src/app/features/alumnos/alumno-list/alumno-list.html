@@ -7,8 +7,8 @@
 </div>
 
 <p-table 
-  [value]="alumnos.value() ?? []" 
-  [loading]="alumnos.isLoading()"
+  [value]="alumnos"
+  [loading]="alumnosResponse.isLoading()"
   [paginator]="true"
   [rows]="10"
   styleClass="p-datatable-striped">
@@ -52,4 +52,4 @@
 
 <app-alumno-form 
   [(visible)]="mostrarFormulario"
-  (alumnoGuardado)="alumnos.reload()" />
+  (alumnoGuardado)="alumnosResponse.reload()" />

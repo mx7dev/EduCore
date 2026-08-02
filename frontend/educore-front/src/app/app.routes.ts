@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { AlumnoList } from './features/alumnos/alumno-list/alumno-list';
 import { authGuard } from  './core/guards/auth-guard';
+import { ProfesorList } from './features/profesores/profesor-list/profesor-list';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,11 @@ export const routes: Routes = [
     component: AlumnoList,
     canActivate: [authGuard]
   },
+  {
+  path: 'profesores',
+  component: ProfesorList,
+  canActivate: [authGuard]
+},
   {
     path: '',
     redirectTo: 'login',
