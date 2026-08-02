@@ -1,0 +1,31 @@
+<p-toast />
+<p-dialog 
+  header="Nuevo Grado"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  (onHide)="cerrar()">
+
+  <div class="form-grid">
+    <div class="field">
+      <label>Número *</label>
+      <input pInputText [formField]="formulario.numero" placeholder="1" class="w-full" />
+    </div>
+    <div class="field">
+      <label>Nivel *</label>
+      <p-select 
+  [options]="niveles" 
+  [(ngModel)]="nivelSeleccionado"
+  optionLabel="label"
+  optionValue="value"
+  placeholder="Selecciona nivel"
+  appendTo="body"
+  class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" (onClick)="cerrar()" />
+    <p-button label="Guardar" [loading]="guardando" (onClick)="guardar()" />
+  </ng-template>
+</p-dialog>

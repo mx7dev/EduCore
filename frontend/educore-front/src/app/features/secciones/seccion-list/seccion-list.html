@@ -1,0 +1,43 @@
+<div class="page-header">
+  <h2>Secciones</h2>
+  <p-button label="Nueva Sección" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+</div>
+
+<p-table 
+  [value]="secciones"
+  [loading]="seccionesResponse.isLoading()"
+  [paginator]="true"
+  [rows]="10"
+  styleClass="p-datatable-striped">
+  
+  <ng-template #header>
+    <tr>
+      <th>Nombre</th>
+      <th>Grado</th>
+      <th>Nivel</th>
+      <th>Turno</th>
+      <th>Periodo</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-seccion>
+    <tr>
+      <td>{{ seccion.nombre }}</td>
+      <td>{{ seccion.numeroGrado }}°</td>
+      <td>{{ seccion.nivelGrado }}</td>
+      <td>{{ seccion.turno }}</td>
+      <td>{{ seccion.anioPeriodo }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template #empty>
+    <tr>
+      <td colspan="5" class="text-center">No hay secciones registradas</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-seccion-form 
+  [visible]="mostrarFormulario"
+  (visibleChange)="mostrarFormulario = $event"
+  (seccionGuardada)="seccionesResponse.reload()" />

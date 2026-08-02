@@ -1,0 +1,43 @@
+<div class="page-header">
+  <h2>Periodos</h2>
+  <p-button label="Nuevo Periodo" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+</div>
+
+<p-table 
+  [value]="periodos"
+  [loading]="periodosResponse.isLoading()"
+  [paginator]="true"
+  [rows]="10"
+  styleClass="p-datatable-striped">
+  
+  <ng-template #header>
+    <tr>
+      <th>Año</th>
+      <th>Descripción</th>
+      <th>Estado</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-periodo>
+    <tr>
+      <td>{{ periodo.anio }}</td>
+      <td>{{ periodo.descripcion }}</td>
+      <td>
+        <p-tag 
+          [value]="periodo.activo ? 'Activo' : 'Inactivo'"
+          [severity]="periodo.activo ? 'success' : 'secondary'" />
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #empty>
+    <tr>
+      <td colspan="3" class="text-center">No hay periodos registrados</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-periodo-form 
+  [visible]="mostrarFormulario"
+  (visibleChange)="mostrarFormulario = $event"
+  (periodoGuardado)="periodosResponse.reload()" />

@@ -190,13 +190,13 @@ namespace EduCore.Infrastructure.Data
             {
                 entity.HasKey(p => p.Id);
 
-                entity.Property(p => p.Año)
+                entity.Property(p => p.Anio)
                     .IsRequired();
 
                 entity.Property(p => p.Descripcion)
                     .HasMaxLength(200);
 
-                entity.HasIndex(p => p.Año)
+                entity.HasIndex(p => p.Anio)
                     .IsUnique();
             });
 

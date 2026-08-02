@@ -1,0 +1,34 @@
+<p-toast />
+<p-dialog header="Nueva Sección" [(visible)]="visible" [modal]="true" [style]="{ width: '500px' }" (onHide)="cerrar()">
+
+    <div class="form-grid">
+        <div class="field">
+            <label>Nombre *</label>
+            <input pInputText [formField]="formulario.nombre" placeholder="A, B, C..." class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Turno *</label>
+            <p-select [options]="turnos" [(ngModel)]="turnoSeleccionado" optionLabel="label" optionValue="value"
+                placeholder="Selecciona turno" class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Grado *</label>
+            <p-select [options]="grados" [(ngModel)]="gradoSeleccionado" optionLabel="label" optionValue="value"
+                placeholder="Selecciona grado" [loading]="gradosResponse.isLoading()" class="w-full" />
+        </div>
+
+        <div class="field">
+            <label>Periodo *</label>
+            <p-select [options]="periodos" [(ngModel)]="periodoSeleccionado" optionLabel="label" optionValue="value"
+                placeholder="Selecciona periodo" [loading]="periodosResponse.isLoading()" appendTo="body"
+                class="w-full" />
+        </div>
+    </div>
+
+    <ng-template #footer>
+        <p-button label="Cancelar" severity="secondary" (onClick)="cerrar()" />
+        <p-button label="Guardar" [loading]="guardando" (onClick)="guardar()" />
+    </ng-template>
+</p-dialog>

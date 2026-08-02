@@ -1,0 +1,27 @@
+<p-toast />
+<p-dialog 
+  header="Nuevo Periodo"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  (onHide)="cerrar()">
+
+  <div class="form-grid">
+    <div class="field">
+      <label>Año *</label>
+      <input pInputText [formField]="formulario.anio" placeholder="2026" class="w-full" />
+      @if (formulario.anio().invalid() && formulario.anio().touched()) {
+        <small class="error">{{ formulario.anio().errors()[0]?.message }}</small>
+      }
+    </div>
+    <div class="field">
+      <label>Descripción</label>
+      <input pInputText [formField]="formulario.descripcion" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" (onClick)="cerrar()" />
+    <p-button label="Guardar" [loading]="guardando" (onClick)="guardar()" />
+  </ng-template>
+</p-dialog>

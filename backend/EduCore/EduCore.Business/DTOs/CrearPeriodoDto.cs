@@ -2,7 +2,7 @@
 {
     public class CrearPeriodoDto
     {
-        public int Año { get; set; }
+        public int Anio { get; set; }
         public string? Descripcion { get; set; }
     }
 }

@@ -31,10 +31,10 @@ namespace EduCore.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Activo);
         }
 
-        public async Task<bool> ExistePorAñoAsync(int año)
+        public async Task<bool> ExistePorAñoAsync(int anio)
         {
             return await _context.Periodos
-                .AnyAsync(p => p.Año == año);
+                .AnyAsync(p => p.Anio == anio);
         }
 
         public async Task GuardarAsync(Periodo periodo)

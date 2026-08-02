@@ -30,9 +30,9 @@ namespace EduCore.Business.Services
         public async Task CrearPeriodoAsync(CrearPeriodoDto dto)
         {
             // Verificar que no exista el año
-            var existe = await _repository.ExistePorAñoAsync(dto.Año);
+            var existe = await _repository.ExistePorAñoAsync(dto.Anio);
             if (existe)
-                throw new FunctionalException("AÑO_DUPLICADO", $"Ya existe un periodo para el año {dto.Año}");
+                throw new FunctionalException("AÑO_DUPLICADO", $"Ya existe un periodo para el año {dto.Anio}");
 
             // Desactivar periodo activo anterior
             var periodoActivo = await _repository.ObtenerActivoAsync();
@@ -43,7 +43,7 @@ namespace EduCore.Business.Services
             }
 
             // Crear nuevo periodo
-            var periodo = new Periodo(dto.Año, dto.Descripcion);
+            var periodo = new Periodo(dto.Anio, dto.Descripcion);
             await _repository.GuardarAsync(periodo);
         }
 
@@ -52,7 +52,7 @@ namespace EduCore.Business.Services
             return new PeriodoDto
             {
                 Id = periodo.Id,
-                Año = periodo.Año,
+                Anio = periodo.Anio,
                 Descripcion = periodo.Descripcion,
                 Activo = periodo.Activo
             };

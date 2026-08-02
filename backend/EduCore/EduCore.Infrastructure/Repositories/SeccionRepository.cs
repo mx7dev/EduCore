@@ -26,7 +26,7 @@ namespace EduCore.Infrastructure.Repositories
                     Turno = s.Turno.ToString(),
                     NumeroGrado = s.Grado.Numero,
                     NivelGrado = s.Grado.Nivel.ToString(),
-                    AnioPeriodo = s.Periodo.Año,
+                    AnioPeriodo = s.Periodo.Anio,
                     Activo = s.Activo
                 })
                 .FirstOrDefaultAsync();
@@ -42,7 +42,7 @@ namespace EduCore.Infrastructure.Repositories
                     Turno = s.Turno.ToString(),
                     NumeroGrado = s.Grado.Numero,
                     NivelGrado = s.Grado.Nivel.ToString(),
-                    AnioPeriodo = s.Periodo.Año,
+                    AnioPeriodo = s.Periodo.Anio,
                     Activo = s.Activo
                 })
                 .ToListAsync();
@@ -59,7 +59,7 @@ namespace EduCore.Infrastructure.Repositories
                     Turno = s.Turno.ToString(),
                     NumeroGrado = s.Grado.Numero,
                     NivelGrado = s.Grado.Nivel.ToString(),
-                    AnioPeriodo = s.Periodo.Año,
+                    AnioPeriodo = s.Periodo.Anio,
                     Activo = s.Activo
                 })
                 .ToListAsync();
