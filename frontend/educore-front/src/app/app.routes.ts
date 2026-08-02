@@ -4,6 +4,7 @@ import { AlumnoList } from './features/alumnos/alumno-list/alumno-list';
 import { authGuard } from './core/guards/auth-guard';
 import { ProfesorList } from './features/profesores/profesor-list/profesor-list';
 import { CursoList } from './features/cursos/curso-list/curso-list';
+import { MatriculaList } from './features/matricula/matricula-list/matricula-list';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,11 @@ export const routes: Routes = [
     component: CursoList,
     canActivate: [authGuard]
   },
+  {
+  path: 'matricula',
+  component: MatriculaList,
+  canActivate: [authGuard]
+},
   {
     path: '',
     redirectTo: 'login',

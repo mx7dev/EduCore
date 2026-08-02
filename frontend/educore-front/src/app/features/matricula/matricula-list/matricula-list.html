@@ -1,0 +1,61 @@
+<div class="page-header">
+  <h2>Matrícula</h2>
+  <p-button 
+    label="Nueva Matrícula" 
+    icon="pi pi-plus"
+    (onClick)="abrirFormulario()" />
+</div>
+
+<p-table 
+  [value]="matriculas"
+  [loading]="matriculasResponse.isLoading()"
+  [paginator]="true"
+  [rows]="10"
+  styleClass="p-datatable-striped">
+  
+  <ng-template #header>
+    <tr>
+      <th>Código</th>
+      <th>Alumno</th>
+      <th>Sección</th>
+      <th>Fecha Matrícula</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-matricula>
+    <tr>
+      <td>{{ matricula.codigoAlumno }}</td>
+      <td>{{ matricula.nombreAlumno }}</td>
+      <td>{{ matricula.nombreSeccion }}</td>
+      <td>{{ matricula.fechaMatricula | date:'dd/MM/yyyy' }}</td>
+      <td>
+        <p-tag 
+          [value]="matricula.activo ? 'Activo' : 'Anulado'"
+          [severity]="matricula.activo ? 'success' : 'danger'" />
+      </td>
+      <td>
+        @if (matricula.activo) {
+          <p-button 
+            icon="pi pi-ban" 
+            severity="danger"
+            [text]="true"
+            pTooltip="Anular matrícula"
+            (onClick)="anular(matricula.id)" />
+        }
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #empty>
+    <tr>
+      <td colspan="6" class="text-center">No hay matrículas registradas</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-matricula-form 
+  [visible]="mostrarFormulario"
+  (visibleChange)="mostrarFormulario = $event"
+  (matriculaGuardada)="matriculasResponse.reload()" />
