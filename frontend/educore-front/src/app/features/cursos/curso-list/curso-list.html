@@ -1,0 +1,50 @@
+<div class="page-header">
+  <h2>Cursos</h2>
+  <p-button 
+    label="Nuevo Curso" 
+    icon="pi pi-plus"
+    (onClick)="abrirFormulario()" />
+</div>
+
+<p-table 
+  [value]="cursos"
+  [loading]="cursosResponse.isLoading()"
+  [paginator]="true"
+  [rows]="10"
+  styleClass="p-datatable-striped">
+  
+  <ng-template #header>
+    <tr>
+      <th>Código</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-curso>
+    <tr>
+      <td>{{ curso.codigo }}</td>
+      <td>{{ curso.nombre }}</td>
+      <td>{{ curso.descripcion }}</td>
+      <td>
+        <p-button 
+          icon="pi pi-trash" 
+          severity="danger"
+          [text]="true"
+          (onClick)="eliminar(curso.id)" />
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #empty>
+    <tr>
+      <td colspan="4" class="text-center">No hay cursos registrados</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-curso-form 
+  [visible]="mostrarFormulario"
+  (visibleChange)="mostrarFormulario = $event"
+  (cursoGuardado)="cursosResponse.reload()" />

@@ -1,0 +1,28 @@
+<p-toast />
+<p-dialog 
+  header="Nuevo Curso"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  (onHide)="cerrar()">
+
+  <div class="form-grid">
+    <div class="field">
+      <label>Nombre *</label>
+      <input pInputText [formField]="formulario.nombre" class="w-full" />
+      @if (formulario.nombre().invalid() && formulario.nombre().touched()) {
+        <small class="error">{{ formulario.nombre().errors()[0]?.message }}</small>
+      }
+    </div>
+
+    <div class="field">
+      <label>Descripción</label>
+      <input pInputText [formField]="formulario.descripcion" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" (onClick)="cerrar()" />
+    <p-button label="Guardar" [loading]="guardando" (onClick)="guardar()" />
+  </ng-template>
+</p-dialog>
