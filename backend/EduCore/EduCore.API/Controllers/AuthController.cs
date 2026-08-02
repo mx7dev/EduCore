@@ -36,13 +36,17 @@ namespace EduCore.API.Controllers
             return new JsonResult(response);
         }
 
+        public class RefreshTokenRequest
+        {
+            public string RefreshToken { get; set; }
+        }
         [HttpPost("refresh-token")]
-        public async Task<JsonResult> RefreshToken(string refreshToken)
+        public async Task<JsonResult> RefreshToken(RefreshTokenRequest request)
         {
             ResponseDto response;
             try
             {
-                var resultado = await _service.RefreshTokenAsync(refreshToken);
+                var resultado = await _service.RefreshTokenAsync(request.RefreshToken);
                 response = new ResponseDto { Success = true, Data = resultado };
             }
             catch (FunctionalException ex)

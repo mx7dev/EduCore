@@ -1,0 +1,40 @@
+<p-toast />
+<p-dialog 
+  header="Registrar Nota"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  (onHide)="cerrar()">
+
+  <div class="form-grid">
+    <div class="field">
+      <label>ID de Matrícula *</label>
+      <input pInputText [formField]="formulario.matriculaId" placeholder="1" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>ID de Curso *</label>
+      <input pInputText [formField]="formulario.cursoId" placeholder="1" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Bimestre *</label>
+      <input pInputText [formField]="formulario.bimestre" placeholder="1, 2, 3 o 4" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Calificación *</label>
+      <input pInputText [formField]="formulario.calificacion" placeholder="0 - 20" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label>Comentario</label>
+      <input pInputText [formField]="formulario.comentario" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" (onClick)="cerrar()" />
+    <p-button label="Guardar" [loading]="guardando" (onClick)="guardar()" />
+  </ng-template>
+</p-dialog>

@@ -60,4 +60,7 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+  refreshToken(token: string) {
+    return this.http.post<any>(`${this.apiUrl}/refresh-token`,{ refreshToken: token });
+  }
 }

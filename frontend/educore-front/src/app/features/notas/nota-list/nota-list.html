@@ -1,0 +1,49 @@
+<div class="page-header">
+  <h2>Notas</h2>
+</div>
+
+<div class="field mb-4">
+  <label>ID de Matrícula</label>
+  <div class="flex gap-2">
+    <input pInputText [(ngModel)]="matriculaIdInput" placeholder="Ingresa el ID de matrícula" />
+    <p-button label="Ver Libreta" icon="pi pi-search" (onClick)="buscarLibreta()" />
+    <p-button label="Registrar Nota" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+  </div>
+</div>
+
+@if (libreta()) {
+  <div class="libreta">
+    <h3>{{ libreta()!.nombreAlumno }} — {{ libreta()!.codigoAlumno }}</h3>
+
+    <p-table [value]="libreta()!.cursos" styleClass="p-datatable-striped">
+      <ng-template #header>
+        <tr>
+          <th>Curso</th>
+          <th>B1</th>
+          <th>B2</th>
+          <th>B3</th>
+          <th>B4</th>
+          <th>Promedio</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-curso>
+        <tr>
+          <td>{{ curso.nombreCurso }}</td>
+          <td>{{ curso.b1 ?? '-' }}</td>
+          <td>{{ curso.b2 ?? '-' }}</td>
+          <td>{{ curso.b3 ?? '-' }}</td>
+          <td>{{ curso.b4 ?? '-' }}</td>
+          <td>
+            <strong>{{ curso.notaFinal?.toFixed(2) ?? '-' }}</strong>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+}
+
+<app-nota-form 
+  [visible]="mostrarFormulario"
+  (visibleChange)="mostrarFormulario = $event"
+  (notaGuardada)="buscarLibreta()" />

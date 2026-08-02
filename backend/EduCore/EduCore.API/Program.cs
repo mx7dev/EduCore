@@ -85,6 +85,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
             ValidAudience = builder.Configuration["JwtSettings:Audience"],
@@ -95,6 +96,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         options.Events = new JwtBearerEvents
         {
+            OnTokenValidated = context =>
+            {
+                var token = context.SecurityToken as Microsoft.IdentityModel.Tokens.SecurityToken;
+                if (token != null)
+                {
+                    Console.WriteLine($"Token válido");
+                    Console.WriteLine($"Expira (UTC): {token.ValidTo}");
+                    Console.WriteLine($"DateTime.UtcNow: {DateTime.UtcNow}");
+                    Console.WriteLine($"¿Expirado?: {token.ValidTo < DateTime.UtcNow}");
+                }
+                return Task.CompletedTask;
+            },
             OnAuthenticationFailed = context =>
             {
                 Console.WriteLine($"Token inválido: {context.Exception.Message}");

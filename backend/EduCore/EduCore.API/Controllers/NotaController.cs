@@ -37,6 +37,8 @@ namespace EduCore.API.Controllers
         [HttpGet("libreta/{matriculaId}")]
         public async Task<JsonResult> ObtenerLibreta(int matriculaId)
         {
+
+            var fechaactual = DateTime.Now;
             ResponseDto response;
             try
             {
