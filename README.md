@@ -55,8 +55,8 @@ src/app/
 ### Fase 2 — Validaciones y manejo de errores
 - FluentValidation para validar DTOs
 - Excepciones personalizadas (`FunctionalException`, `TechnicalException`)
+- `ResponseDto` estándar para todas las respuestas del backend
 - Manejo de errores controlado en controllers
-- Respuestas de error con código, mensaje y transactionId
 
 ### Fase 3 — Autenticación y Autorización
 - JWT + Refresh Token
@@ -68,24 +68,28 @@ src/app/
 
 ### Fase 4 — Módulos académicos (Backend)
 - CRUD Profesores, Cursos, Periodos, Grados, Secciones
-- Matrícula con validación de duplicado
+- Matrícula con validación de duplicado por periodo
 - Notas por bimestre con libreta calculada automáticamente
 - Proyecciones optimizadas en Secciones (sin over-fetching)
 
 ### Fase 5 — Frontend Angular 22
 - Layout con Sidebar y Navbar
 - Login conectado al backend con Toast de errores
+- Logout funcional
 - Auth Guard para protección de rutas
 - Auth Interceptor para envío automático del token JWT
-- Listado de alumnos con `httpResource` (Angular 22)
-- Formulario de nuevo alumno con Signal Forms
-- DatePicker en español con PrimeNG 22
+- Listado de Alumnos con `httpResource` (Angular 22)
+- Formulario de nuevo Alumno con Signal Forms + DatePicker en español
+- Listado de Profesores con `httpResource`
+- Formulario de nuevo Profesor con Signal Forms
+- Toast de éxito/error en formularios
+- ResponseDto estándar integrado en el frontend
 
 ## 🔜 Próximas fases
 
-- **Fase 6** — Pantallas de Profesores, Cursos, Matrícula y Notas
+- **Fase 6** — Pantallas de Cursos, Matrícula y Notas
 - **Fase 7** — Foto de perfil
-- **Fase 8** — Logout y gestión de sesión
+- **Fase 8** — Mejoras de UI/UX
 
 ## 🚀 Cómo ejecutar
 
@@ -126,8 +130,9 @@ src/app/
 | Repository Pattern | DbContext directo | Desacoplar datos del negocio |
 | Scoped lifetime | Singleton | Cada request tiene su propio DbContext |
 | JWT + Refresh Token | Solo JWT | Mejor UX sin sacrificar seguridad |
+| ResponseDto estándar | Texto plano / objetos directos | Consistencia en todas las respuestas del backend |
 | httpResource | subscribe/RxJS | Estándar Angular 22, sin boilerplate |
-| Signal Forms | ReactiveFormsModule | Estándar Angular 22 estable |
+| Signal Forms | ReactiveFormsModule | Estándar Angular 22 |
 | PrimeNG 22 Community | Angular Material | Mejor diseño para sistemas enterprise |
 | Swagger sobre Scalar | Scalar | Bug conocido en .NET 10 — migrar a Scalar en próximos proyectos |
 | Proyecciones en Secciones | Include completo | Evitar over-fetching |
