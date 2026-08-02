@@ -8,19 +8,30 @@
 
   <div class="form-grid">
     <div class="field">
-      <label>ID del Alumno *</label>
-      <input pInputText [formField]="formulario.alumnoId" placeholder="1" class="w-full" />
-      @if (formulario.alumnoId().invalid() && formulario.alumnoId().touched()) {
-        <small class="error">{{ formulario.alumnoId().errors()[0]?.message }}</small>
-      }
+      <label>Alumno *</label>
+      <p-select 
+        [options]="alumnos"
+        [(ngModel)]="alumnoSeleccionado"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecciona alumno"
+        [loading]="alumnosResponse.isLoading()"
+        [filter]="true"
+        appendTo="body"
+        class="w-full" />
     </div>
 
     <div class="field">
-      <label>ID de la Sección *</label>
-      <input pInputText [formField]="formulario.seccionId" placeholder="1" class="w-full" />
-      @if (formulario.seccionId().invalid() && formulario.seccionId().touched()) {
-        <small class="error">{{ formulario.seccionId().errors()[0]?.message }}</small>
-      }
+      <label>Sección *</label>
+      <p-select 
+        [options]="secciones"
+        [(ngModel)]="seccionSeleccionada"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecciona sección"
+        [loading]="seccionesResponse.isLoading()"
+        appendTo="body"
+        class="w-full" />
     </div>
   </div>
 
