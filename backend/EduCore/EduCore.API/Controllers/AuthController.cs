@@ -17,39 +17,43 @@ namespace EduCore.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        public async Task<JsonResult> Login(LoginDto dto)
         {
+            ResponseDto response;
             try
             {
                 var resultado = await _service.LoginAsync(dto);
-                return Ok(resultado);
+                response = new ResponseDto { Success = true, Data = resultado };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        public async Task<JsonResult> RefreshToken(string refreshToken)
         {
+            ResponseDto response;
             try
             {
                 var resultado = await _service.RefreshTokenAsync(refreshToken);
-                return Ok(resultado);
+                response = new ResponseDto { Success = true, Data = resultado };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
     }
 }

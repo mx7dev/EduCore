@@ -22,89 +22,86 @@ namespace EduCore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtenerTodos()
+        public async Task<JsonResult> ObtenerTodos()
         {
+            ResponseDto response;
             try
             {
                 var cursos = await _service.ObtenerTodosAsync();
-                return Ok(cursos);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = true, Data = cursos };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObtenerPorId(int id)
+        public async Task<JsonResult> ObtenerPorId(int id)
         {
+            ResponseDto response;
             try
             {
                 var curso = await _service.ObtenerPorIdAsync(id);
                 if (curso == null)
-                    return NotFound(new { error = $"No se encontró curso con ID {id}" });
-                return Ok(curso);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                    response = new ResponseDto { Success = false, Message = $"No se encontró curso con ID {id}" };
+                else
+                    response = new ResponseDto { Success = true, Data = curso };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear([FromBody] CrearCursoDto dto)
+        public async Task<JsonResult> Crear(CrearCursoDto dto)
         {
+            ResponseDto response;
+
             var resultado = await _validator.ValidateAsync(dto);
             if (!resultado.IsValid)
-                return BadRequest(resultado.Errors.Select(e => e.ErrorMessage));
+            {
+                response = new ResponseDto { Success = false, Message = string.Join(", ", resultado.Errors.Select(e => e.ErrorMessage)) };
+                return new JsonResult(response);
+            }
 
             try
             {
                 await _service.CrearCursoAsync(dto);
-                return Ok("Curso creado correctamente");
+                response = new ResponseDto { Success = true, Message = "Curso creado correctamente" };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code, transactionId = ex.TransactionId });
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Eliminar(int id)
+        public async Task<JsonResult> Eliminar(int id)
         {
+            ResponseDto response;
             try
             {
                 await _service.EliminarAsync(id);
-                return Ok("Curso eliminado correctamente");
+                response = new ResponseDto { Success = true, Message = "Curso eliminado correctamente" };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code, transactionId = ex.TransactionId });
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
     }
 }

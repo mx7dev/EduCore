@@ -19,63 +19,58 @@ namespace EduCore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtenerTodos()
+        public async Task<JsonResult> ObtenerTodos()
         {
+            ResponseDto response;
             try
             {
                 var periodos = await _service.ObtenerTodosAsync();
-                return Ok(periodos);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = true, Data = periodos };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpGet("activo")]
-        public async Task<IActionResult> ObtenerActivo()
+        public async Task<JsonResult> ObtenerActivo()
         {
+            ResponseDto response;
             try
             {
                 var periodo = await _service.ObtenerActivoAsync();
                 if (periodo == null)
-                    return NotFound(new { error = "No hay periodo activo" });
-                return Ok(periodo);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                    response = new ResponseDto { Success = false, Message = "No hay periodo activo" };
+                else
+                    response = new ResponseDto { Success = true, Data = periodo };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear([FromBody] CrearPeriodoDto dto)
+        public async Task<JsonResult> Crear(CrearPeriodoDto dto)
         {
+            ResponseDto response;
             try
             {
                 await _service.CrearPeriodoAsync(dto);
-                return Ok("Periodo creado correctamente");
+                response = new ResponseDto { Success = true, Message = "Periodo creado correctamente" };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code, transactionId = ex.TransactionId });
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
     }
 }

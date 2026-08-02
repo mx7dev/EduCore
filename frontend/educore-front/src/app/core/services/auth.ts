@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { ResponseDto } from './response';
 
 export interface LoginRequest {
   email: string;
@@ -19,7 +20,7 @@ export interface LoginResponse {
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/Auth`;
-  
+
   isAuthenticated = signal(false);
   currentUser = signal<string | null>(null);
 
@@ -36,7 +37,7 @@ export class AuthService {
   }
 
   login(request: LoginRequest) {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, request);
+    return this.http.post<ResponseDto<LoginResponse>>(`${this.apiUrl}/login`, request);
   }
 
   guardarSesion(response: LoginResponse, userName: string) {

@@ -19,103 +19,94 @@ namespace EduCore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtenerTodos()
+        public async Task<JsonResult> ObtenerTodos()
         {
+            ResponseDto response;
             try
             {
                 var matriculas = await _service.ObtenerTodosAsync();
-                return Ok(matriculas);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = true, Data = matriculas };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObtenerPorId(int id)
+        public async Task<JsonResult> ObtenerPorId(int id)
         {
+            ResponseDto response;
             try
             {
                 var matricula = await _service.ObtenerPorIdAsync(id);
                 if (matricula == null)
-                    return NotFound(new { error = $"No se encontró matrícula con ID {id}" });
-                return Ok(matricula);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                    response = new ResponseDto { Success = false, Message = $"No se encontró matrícula con ID {id}" };
+                else
+                    response = new ResponseDto { Success = true, Data = matricula };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpGet("seccion/{seccionId}")]
-        public async Task<IActionResult> ObtenerPorSeccion(int seccionId)
+        public async Task<JsonResult> ObtenerPorSeccion(int seccionId)
         {
+            ResponseDto response;
             try
             {
                 var matriculas = await _service.ObtenerPorSeccionAsync(seccionId);
-                return Ok(matriculas);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = true, Data = matriculas };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Matricular([FromBody] CrearMatriculaDto dto)
+        public async Task<JsonResult> Matricular(CrearMatriculaDto dto)
         {
+            ResponseDto response;
             try
             {
                 await _service.MatricularAlumnoAsync(dto);
-                return Ok("Alumno matriculado correctamente");
+                response = new ResponseDto { Success = true, Message = "Alumno matriculado correctamente" };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code, transactionId = ex.TransactionId });
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpPatch("{id}/anular")]
-        public async Task<IActionResult> Anular(int id)
+        public async Task<JsonResult> Anular(int id)
         {
+            ResponseDto response;
             try
             {
                 await _service.AnularMatriculaAsync(id);
-                return Ok("Matrícula anulada correctamente");
+                response = new ResponseDto { Success = true, Message = "Matrícula anulada correctamente" };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code, transactionId = ex.TransactionId });
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
     }
 }

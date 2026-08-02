@@ -24,7 +24,7 @@ export class Login {
     private authService: AuthService,
     private router: Router,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   login() {
     if (!this.email || !this.password) {
@@ -40,16 +40,24 @@ export class Login {
     this.authService.login({ email: this.email, password: this.password })
       .subscribe({
         next: (response) => {
-          this.authService.guardarSesion(response, this.email);
           this.cargando = false;
-          this.router.navigate(['/alumnos']);
+          if (response.success && response.data) {
+            this.authService.guardarSesion(response.data, this.email);
+            this.router.navigate(['/alumnos']);
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: response.message || 'Credenciales incorrectas'
+            });
+          }
         },
-        error: (err) => {
+        error: () => {
           this.cargando = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: err.error?.error || 'Credenciales incorrectas'
+            detail: 'Error inesperado'
           });
         }
       });

@@ -19,61 +19,55 @@ namespace EduCore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtenerTodos()
+        public async Task<JsonResult> ObtenerTodos()
         {
+            ResponseDto response;
             try
             {
                 var grados = await _service.ObtenerTodosAsync();
-                return Ok(grados);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = true, Data = grados };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpGet("nivel/{nivel}")]
-        public async Task<IActionResult> ObtenerPorNivel(int nivel)
+        public async Task<JsonResult> ObtenerPorNivel(int nivel)
         {
+            ResponseDto response;
             try
             {
                 var grados = await _service.ObtenerPorNivelAsync(nivel);
-                return Ok(grados);
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = true, Data = grados };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear([FromBody] CrearGradoDto dto)
+        public async Task<JsonResult> Crear(CrearGradoDto dto)
         {
+            ResponseDto response;
             try
             {
                 await _service.CrearGradoAsync(dto);
-                return Ok("Grado creado correctamente");
+                response = new ResponseDto { Success = true, Message = "Grado creado correctamente" };
             }
             catch (FunctionalException ex)
             {
-                return BadRequest(new { error = ex.Message, code = ex.Code, transactionId = ex.TransactionId });
-            }
-            catch (TechnicalException ex)
-            {
-                return StatusCode(500, new { error = ex.Message, transactionId = ex.TransactionId });
+                response = new ResponseDto { Success = false, Message = ex.Message, Code = ex.Code, TransactionId = ex.TransactionId };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = "Error inesperado", detalle = ex.Message });
+                response = new ResponseDto { Success = false, Message = ex.Message };
             }
+            return new JsonResult(response);
         }
     }
 }
